@@ -23,7 +23,6 @@ class ActivityA : AppCompatActivity() {
 
     fun goToB(view: View) {
         val intenet = Intent(this, ActivityB::class.java)
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intenet)
     }
 

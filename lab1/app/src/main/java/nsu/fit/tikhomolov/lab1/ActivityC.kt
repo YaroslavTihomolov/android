@@ -22,7 +22,7 @@ class ActivityC : AppCompatActivity() {
 
     fun goToA(view: View) {
         val intent = Intent(this, ActivityA::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
     }
