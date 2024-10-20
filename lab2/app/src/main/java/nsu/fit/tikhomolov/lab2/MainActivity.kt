@@ -2,8 +2,6 @@ package nsu.fit.tikhomolov.lab2
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.recyclerview.widget.LinearLayoutManager
 import nsu.fit.tikhomolov.lab2.databinding.ActivityMainBinding
 
@@ -26,9 +24,4 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = manager
         binding.recyclerView.adapter = adapter
     }
-}
-
-@Composable
-fun SongListScreen() {
-    Text("Song List")
 }
