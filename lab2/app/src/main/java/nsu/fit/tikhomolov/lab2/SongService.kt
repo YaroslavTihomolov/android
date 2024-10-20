@@ -26,16 +26,7 @@ class SongService {
 
     companion object {
         private val IMAGES = mutableListOf(
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg",
-            "res/drawable/preview1.jpg"
+            "res/drawable/preview.jpg"
         )
     }
 
