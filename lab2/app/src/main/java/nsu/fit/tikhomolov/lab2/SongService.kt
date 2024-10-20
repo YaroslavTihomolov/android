@@ -1,7 +1,5 @@
 package nsu.fit.tikhomolov.lab2
 
-import com.github.javafaker.Faker
-
 class SongService {
 
     private var songs = mutableListOf<Song>()
@@ -11,7 +9,6 @@ class SongService {
     }
 
     init {
-        val faker = Faker.instance()
 
         songs = (0..49).map {
             Song(
