@@ -16,8 +16,8 @@ class SongService {
         songs = (0..49).map {
             Song(
                 id = it.toLong(),
-                name = faker.music().genre(),
-                author = faker.artist().name(),
+                name = "No Hay Ley",
+                author = "Kali Uchis",
                 photo = IMAGES[it % IMAGES.size],
                 isPlayed = false
             )
@@ -26,16 +26,16 @@ class SongService {
 
     companion object {
         private val IMAGES = mutableListOf(
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg",
-            "res/drawable/preview.jpg"
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg",
+            "res/drawable/preview1.jpg"
         )
     }
 

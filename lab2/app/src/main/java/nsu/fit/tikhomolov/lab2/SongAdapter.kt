@@ -32,9 +32,9 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
         val context = holder.itemView.context
 
         with(holder.binding) {
+            songInfo.nameTextView.text = song.name
+            songInfo.companyTextView.text = song.author
 
-            nameTextView.text = song.name
-            companyTextView.text = song.author
             playingImageView.setImageResource(if (song.isPlayed) R.drawable.ic_pauce else R.drawable.ic_play)
 
             playingImageView.setOnClickListener {
