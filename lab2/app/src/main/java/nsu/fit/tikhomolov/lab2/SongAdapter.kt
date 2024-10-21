@@ -47,16 +47,7 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
                 song.isPlayed = !song.isPlayed
                 playingImageView.setImageResource(if (song.isPlayed) R.drawable.ic_pauce else R.drawable.ic_play)
             }
-
-            Glide.with(context)
-                .load(song.photo)
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(16)))
-                .error(
-                    Glide.with(context).load(R.drawable.preview)
-                        .apply(RequestOptions.bitmapTransform(RoundedCorners(16)))
-                )
-                .placeholder(R.drawable.rounded_background)
-                .into(imageView)
+            imageView.setImageResource(R.drawable.preview)
         }
     }
 
