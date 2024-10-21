@@ -3,9 +3,6 @@ package nsu.fit.tikhomolov.lab2
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import nsu.fit.tikhomolov.lab2.databinding.ItemSongBinding
 
 class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
