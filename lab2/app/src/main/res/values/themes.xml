@@ -26,4 +26,9 @@
         <item name="android:textAlignment">viewStart</item>
     </style>
 
+    <style name="ImageCornerStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
 </resources>

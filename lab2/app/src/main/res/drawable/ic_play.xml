@@ -4,13 +4,12 @@
     android:viewportWidth="100"
     android:viewportHeight="100">
 
-    <!-- Круг -->
     <path
         android:fillColor="#91d2d5"
         android:pathData="M50,0a50,50 0,1,0 0,100a50,50 0,1,0 0,-100" />
 
-    <!-- Уменьшенный треугольник (Play) -->
     <path
         android:fillColor="@android:color/black"
-        android:pathData="M40,30l0,40l30,-20L40,30z" /> <!-- Изменены координаты -->
+        android:pathData="M40,30l0,40l30,-20L40,30z" />
+
 </vector>
