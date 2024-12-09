@@ -46,7 +46,6 @@ class MainActivity : ComponentActivity() {
 
         val manager = LinearLayoutManager(this)
         adapter = CurrencyAdapter()
-        adapter.setHasStableIds(true)
         adapter.data = currencyService.getCurrency()
 
         binding.recyclerView.layoutManager = manager
@@ -103,11 +102,9 @@ class MainActivity : ComponentActivity() {
                                 image = currencyService.getImage(valut.charCode.toString())
                             )
                         }?.collect(Collectors.toList()) ?: emptyList()
-                    println("Currencies size: ${currencies.size}")
-                    println("Adapter data size: ${adapter.data.size}")
-
-                    currencyContext.currencies = currencies
+                    currencyContext.currencies = currencies + currencyRussia
                     adapter.data = currencies
+                    adapter.notifyDataSetChanged()
                     val codes = currencyContext.currencies
                         .stream()
                         .map {

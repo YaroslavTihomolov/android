@@ -24,13 +24,11 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
     }
 
     override fun getItemCount(): Int {
-        println("Adapter item count: ${data.size}")
         return data.size
     }
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         val currency = data[position]
-        println("data!!! " + currency.name + " " + currency.charCode + " " + currency.image +  " " + position)
         val context = holder.itemView.context
 
 
