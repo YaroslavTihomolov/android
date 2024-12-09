@@ -3,6 +3,8 @@ package nsu.fit.tikhomolov.lab3
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import nsu.fit.tikhomolov.lab3.databinding.ItemCurrencyBinding
 
 class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
@@ -12,38 +14,36 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
             notifyDataSetChanged()
         }
 
-    class CurrencyViewHolder(val binding: ItemCurr) : RecyclerView.ViewHolder(binding.root)
+    class CurrencyViewHolder(val binding: ItemCurrencyBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = .inflate(inflater, parent, false)
+        val binding = ItemCurrencyBinding.inflate(inflater, parent, false)
 
         return CurrencyViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount(): Int {
+        println("Adapter item count: ${data.size}")
+        return data.size
+    }
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
-        val song = data[position]
+        val currency = data[position]
+        println("data!!! " + currency.name + " " + currency.charCode + " " + currency.image +  " " + position)
         val context = holder.itemView.context
 
+
         with(holder.binding) {
-            songInfo.nameTextView.text = song.name
-            songInfo.companyTextView.text = song.author
+            currencyInfo.nameTextView.text = currency.name
+            currencyInfo.companyTextView.text = currency.charCode
+            currencyValue.text = String.format("%s%c", currency.value, '₽')
 
-            playingImageView.setImageResource(if (song.isPlayed) R.drawable.ic_pauce else R.drawable.ic_play)
-
-            playingImageView.setOnClickListener {
-                data.stream()
-                    .filter { s -> s.isPlayed && s.id != song.id }
-                    .forEach { s ->
-                        s.isPlayed = false
-                        notifyItemChanged(s.id.toInt())
-                    }
-                song.isPlayed = !song.isPlayed
-                playingImageView.setImageResource(if (song.isPlayed) R.drawable.ic_pauce else R.drawable.ic_play)
-            }
-            imageView.setImageResource(R.drawable.preview)
+            Glide.with(context)
+                .clear(imageView)
+            Glide.with(context).load(currency.image).circleCrop()
+                .error(R.drawable.preview)
+                .placeholder(R.drawable.preview).into(imageView)
         }
     }
 

@@ -47,9 +47,17 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
+    implementation(libs.glide.v4151)
+    implementation(libs.androidx.recyclerview.v121)
+    implementation(libs.javafaker)
+    implementation(libs.glide)
     implementation(libs.converter.simplexml)
     implementation(libs.simple.xml)
     implementation(libs.retrofit)
@@ -65,6 +73,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
