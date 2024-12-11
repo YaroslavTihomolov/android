@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -54,6 +55,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.jetbrains.kotlin.parcelize.runtime)
     implementation(libs.glide.v4151)
     implementation(libs.androidx.recyclerview.v121)
     implementation(libs.javafaker)

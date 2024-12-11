@@ -1,3 +1,5 @@
+package nsu.fit.tikhomolov.lab3
+
 import org.simpleframework.xml.Attribute
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList

@@ -1,10 +1,10 @@
-package nsu.fit.tikhomolov.lab3
+package nsu.fit.tikhomolov.lab3.cbrf
 
-import CurrencyDto
+import nsu.fit.tikhomolov.lab3.CurrencyDto
 import retrofit2.Call
 import retrofit2.http.GET
 
-interface CurrencyApiService {
+interface CbrfApiService {
     @GET("scripts/XML_daily.asp")
     fun getLatestRates(): Call<CurrencyDto>
 }

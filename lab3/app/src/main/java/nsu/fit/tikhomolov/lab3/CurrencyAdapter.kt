@@ -14,7 +14,8 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
             notifyDataSetChanged()
         }
 
-    class CurrencyViewHolder(val binding: ItemCurrencyBinding) : RecyclerView.ViewHolder(binding.root)
+    class CurrencyViewHolder(val binding: ItemCurrencyBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -37,8 +38,6 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
             currencyInfo.companyTextView.text = currency.charCode
             currencyValue.text = String.format("%s%c", currency.value, '₽')
 
-            Glide.with(context)
-                .clear(imageView)
             Glide.with(context).load(currency.image).circleCrop()
                 .error(R.drawable.preview)
                 .placeholder(R.drawable.preview).into(imageView)

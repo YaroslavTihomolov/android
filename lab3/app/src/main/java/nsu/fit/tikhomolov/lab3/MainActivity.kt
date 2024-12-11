@@ -1,25 +1,18 @@
 package nsu.fit.tikhomolov.lab3
 
-import CurrencyDto
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.recyclerview.widget.LinearLayoutManager
+import nsu.fit.tikhomolov.lab3.cbrf.CbrfInvoker
+import nsu.fit.tikhomolov.lab3.cbrf.CurrencyMapper
 import nsu.fit.tikhomolov.lab3.databinding.ActivityMainBinding
-import nsu.fit.tikhomolov.lab3.ui.theme.Lab3Theme
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
-import java.util.stream.Collectors
 
 
 class MainActivity : ComponentActivity() {
+
+    private var CODES: String = "CODES"
+    private var CURRENCIES: String = "CURRENCIES"
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: CurrencyAdapter
@@ -27,19 +20,12 @@ class MainActivity : ComponentActivity() {
     private lateinit var adapterTo: ArrayAdapter<String>
     private lateinit var currencyContext: CurrencyContext
     private lateinit var calculateService: CurrencyCalculateService
+    private lateinit var currencyMapper: CurrencyMapper
+    private lateinit var cbrfInvoker: CbrfInvoker
     private val currencyService: CurrencyService get() = (applicationContext as App).currencyService
-
-    private val currencyRussia: Currency = Currency(
-        id = "1",
-        name = "Russia",
-        charCode = "RUB",
-        value = "1",
-        image = null
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -51,9 +37,14 @@ class MainActivity : ComponentActivity() {
         binding.recyclerView.layoutManager = manager
         binding.recyclerView.adapter = adapter
 
-        currencyContext = CurrencyContext(listOf())
-        calculateService = CurrencyCalculateService(this, currencyContext)
+        val savedCurrencies = savedInstanceState?.getParcelableArrayList<Currency>(CURRENCIES)
+        val savedCodes = savedInstanceState?.getStringArrayList(CODES)
 
+        currencyContext = CurrencyContext(
+            savedCurrencies ?: listOf(),
+            savedCodes ?: listOf()
+        )
+        calculateService = CurrencyCalculateService(this, currencyContext)
 
         adapterFrom = ArrayAdapter(
             this,
@@ -64,81 +55,32 @@ class MainActivity : ComponentActivity() {
 
         adapterFrom.setDropDownViewResource(R.layout.spinner_dropdown_item)
         adapterTo.setDropDownViewResource(R.layout.spinner_dropdown_item)
+
         binding.currencyChange.currencyFrom.adapter = adapterFrom
         binding.currencyChange.currencyTo.adapter = adapterTo
 
+        if (savedCurrencies != null && savedCodes != null) {
+            adapter.data = currencyContext.currencies
+            updateAdapterValues(adapterTo, savedCodes)
+            updateAdapterValues(adapterFrom, savedCodes)
+        } else {
+            currencyMapper = CurrencyMapper(currencyService)
+            cbrfInvoker =
+                CbrfInvoker(currencyMapper, currencyContext, adapter, adapterFrom, adapterTo)
+            cbrfInvoker.createRequest()
+        }
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        doRequest()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(CURRENCIES, ArrayList(currencyContext.currencies))
+        outState.putStringArrayList(CODES, ArrayList(currencyContext.codes))
     }
 
-    private fun doRequest() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.cbr.ru/")
-            .addConverterFactory(SimpleXmlConverterFactory.create())
-            .build()
-
-        val apiService = retrofit.create(
-            CurrencyApiService::class.java
-        )
-
-        apiService.getLatestRates().enqueue(object : Callback<CurrencyDto> {
-            override fun onResponse(call: Call<CurrencyDto>, response: Response<CurrencyDto>) {
-                if (response.isSuccessful) {
-                    val currencyDto = response.body()
-                    val currencies = currencyDto?.valutes?.stream()
-                        ?.filter { valut ->
-                            currencyService.getImage(valut.charCode.toString()) != null
-                        }
-                        ?.map { valut ->
-                            Currency(
-                                id = valut.id,
-                                name = valut.name.toString(),
-                                charCode = valut.charCode.toString(),
-                                value = valut.value,
-                                image = currencyService.getImage(valut.charCode.toString())
-                            )
-                        }?.collect(Collectors.toList()) ?: emptyList()
-                    currencyContext.currencies = currencies + currencyRussia
-                    adapter.data = currencies
-                    adapter.notifyDataSetChanged()
-                    val codes = currencyContext.currencies
-                        .stream()
-                        .map {
-                            cur -> cur.charCode
-                        }.collect(Collectors.toList()) ?: emptyList()
-                    adapterFrom.clear()
-                    adapterFrom.addAll(codes)
-                    adapterTo.clear()
-                    adapterTo.addAll(codes)
-                } else {
-                    println("Error!!")
-                }
-            }
-
-            override fun onFailure(call: Call<CurrencyDto>, t: Throwable) {
-                println(t)
-            }
-        })
+    private fun updateAdapterValues(adapter: ArrayAdapter<String>, values: List<String>) {
+        adapter.clear()
+        adapter.addAll(values)
     }
 
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Lab3Theme {
-        Greeting("Android")
-    }
 }
