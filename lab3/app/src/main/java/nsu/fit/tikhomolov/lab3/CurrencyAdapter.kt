@@ -8,6 +8,8 @@ import nsu.fit.tikhomolov.lab3.databinding.ItemCurrencyBinding
 
 class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
+    private val MAX_VALUE_LENGTH = 6
+
     var data: List<Currency> = emptyList()
         set(newValue) {
             field = newValue
@@ -36,12 +38,19 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>
         with(holder.binding) {
             currencyInfo.nameTextView.text = currency.name
             currencyInfo.companyTextView.text = currency.charCode
-            currencyValue.text = String.format("%s%c", currency.value, '₽')
+            currencyValue.text = String.format("%s%c", getCurrency(currency.value), '₽')
 
             Glide.with(context).load(currency.image).circleCrop()
                 .error(R.drawable.preview)
                 .placeholder(R.drawable.preview).into(imageView)
         }
+    }
+
+    private fun getCurrency(value: String?): String {
+        if (value?.length!! > MAX_VALUE_LENGTH) {
+            return value.substring(0, MAX_VALUE_LENGTH);
+        }
+        return value;
     }
 
 }
