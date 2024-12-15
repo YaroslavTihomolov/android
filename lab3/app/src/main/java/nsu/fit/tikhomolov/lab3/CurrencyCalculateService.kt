@@ -60,6 +60,20 @@ class CurrencyCalculateService(
             override fun onNothingSelected(parentView: AdapterView<*>?) {
             }
         }
+
+        amount2Currency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                updateCalculation()
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+            }
+        }
     }
 
     private fun updateCalculation() {
