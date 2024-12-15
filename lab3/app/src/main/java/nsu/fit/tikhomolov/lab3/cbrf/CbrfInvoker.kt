@@ -1,15 +1,15 @@
 package nsu.fit.tikhomolov.lab3.cbrf
 
-import nsu.fit.tikhomolov.lab3.CurrencyDto
 import android.widget.ArrayAdapter
 import nsu.fit.tikhomolov.lab3.Currency
 import nsu.fit.tikhomolov.lab3.CurrencyAdapter
 import nsu.fit.tikhomolov.lab3.CurrencyContext
+import nsu.fit.tikhomolov.lab3.CurrencyDto
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.stream.Collectors
 
 class CbrfInvoker(
@@ -20,11 +20,11 @@ class CbrfInvoker(
     private val spinnerAdapterTo: ArrayAdapter<String>
 ) {
 
-    private var CBRF_URL: String = "https://www.cbr.ru/"
+    private var CBRF_URL: String = "https://www.cbr-xml-daily.ru/"
 
     private var retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(CBRF_URL)
-        .addConverterFactory(SimpleXmlConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val apiService = retrofit.create(
@@ -39,30 +39,26 @@ class CbrfInvoker(
         image = null
     )
 
-    fun createRequest(retryCount: Int = 3) {
-        println("!!!createRequest")
+    fun createRequest() {
         apiService.getLatestRates().enqueue(object : Callback<CurrencyDto> {
             override fun onResponse(call: Call<CurrencyDto>, response: Response<CurrencyDto>) {
                 if (response.isSuccessful) {
                     val currencies = response.body()?.let { currencyDto ->
                         currencyMapper.mapData(currencyDto)
                     } ?: emptyList()
-                    currencyContext.currencies = currencies
+                    currencyContext.currencies = (currencies + RUSSIA_CURRENCY)
                     recycleAdapter.data = currencies
-                    val codes = (currencyContext.currencies + RUSSIA_CURRENCY)
-                        .stream()
+                    val codes = currencyContext.currencies.stream()
                         .map { cur ->
                             cur.charCode
                         }.collect(Collectors.toList()) ?: emptyList()
                     updateAdapterValues(spinnerAdapterFrom, codes)
                     updateAdapterValues(spinnerAdapterTo, codes)
-                } else {
-                    createRequest(retryCount - 1)
                 }
             }
 
             override fun onFailure(call: Call<CurrencyDto>, t: Throwable) {
-                createRequest(retryCount - 1)
+                println("Get currency fail $t")
             }
         })
     }
